@@ -125,7 +125,7 @@ export default function ProjectsSection() {
           className="mt-12 text-center"
         >
           <p className="text-gray-400 max-w-2xl mx-auto">
-            These projects represent a small selection of my work. Each project was chosen for its unique challenges and innovative solutions.
+          Crafting sophisticated small to medium-scale web applications, dynamic features, captivating animations, and designing interactive layouts through advanced coding techniques.
           </p>
         </motion.div>
       </div>

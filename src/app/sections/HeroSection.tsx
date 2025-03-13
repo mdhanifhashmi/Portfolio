@@ -67,10 +67,12 @@ export default function HeroSection() {
               Get in Touch
             </a>
             <a
-              href="#projects"
+              href="/cv.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
               className="bg-gray-800 hover:bg-gray-700 text-white font-semibold py-3 px-8 rounded-lg transition-colors duration-300"
             >
-              View Projects
+              View CV
             </a>
           </motion.div>
         </motion.div>

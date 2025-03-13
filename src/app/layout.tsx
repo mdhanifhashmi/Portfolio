@@ -1,7 +1,6 @@
 import './globals.css'
 import { Inter, Roboto_Mono } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/react'
-import { ThemeProvider } from './components/theme-provider'
 
 const inter = Inter({
   subsets: ['latin'],
@@ -27,18 +26,11 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en">
       <body className={`${inter.variable} ${robotoMono.variable} font-sans antialiased`}>
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
-          <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black text-white">
-            {children}
-          </div>
-        </ThemeProvider>
+        <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black text-white">
+          {children}
+        </div>
         <Analytics />
       </body>
     </html>

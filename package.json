@@ -1,12 +1,15 @@
 {
   "name": "portfolio-site",
+  "homepage": "https://mdhanifhashmi.github.io/Portfolio",
   "version": "0.1.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d out --nojekyll"
   },
   "dependencies": {
     "@vercel/analytics": "^1.5.0",

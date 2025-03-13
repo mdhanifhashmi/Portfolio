@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
-import { useTheme } from 'next-themes'
 
 const navItems = [
   { name: 'Home', href: '#home' },
@@ -15,7 +14,6 @@ const navItems = [
 export default function Navigation() {
   const [mounted, setMounted] = useState(false)
   const [isOpen, setIsOpen] = useState(false)
-  const { theme, setTheme } = useTheme()
   const [scrolled, setScrolled] = useState(false)
 
   useEffect(() => {
@@ -58,12 +56,6 @@ export default function Navigation() {
                   {item.name}
                 </motion.a>
               ))}
-              <button
-                onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-                className="p-2 rounded-lg bg-gray-800 hover:bg-gray-700 transition-colors"
-              >
-                {theme === 'dark' ? 'Light' : 'Dark'}
-              </button>
             </div>
           </div>
 
@@ -105,15 +97,6 @@ export default function Navigation() {
               {item.name}
             </a>
           ))}
-          <button
-            onClick={() => {
-              setTheme(theme === 'dark' ? 'light' : 'dark')
-              setIsOpen(false)
-            }}
-            className="w-full text-left text-gray-300 hover:text-white px-3 py-2 rounded-md text-base font-medium"
-          >
-            {theme === 'dark' ? 'Light Mode' : 'Dark Mode'}
-          </button>
         </div>
       </motion.div>
     </nav>

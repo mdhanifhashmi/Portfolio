@@ -7,80 +7,95 @@ const skillCategories = [
   {
     name: 'Frontend Development',
     skills: [
-      { name: 'React', level: 95 },
-      { name: 'TypeScript', level: 90 },
-      { name: 'Next.js', level: 85 },
-      { name: 'Vue.js', level: 80 },
-      { name: 'Angular', level: 75 },
+      { name: 'React', icon: 'https://raw.githubusercontent.com/devicons/devicon/master/icons/react/react-original.svg' },
+      { name: 'TypeScript', icon: 'https://raw.githubusercontent.com/devicons/devicon/master/icons/typescript/typescript-original.svg' },
+      { name: 'Next.js', icon: 'https://raw.githubusercontent.com/devicons/devicon/master/icons/nextjs/nextjs-original.svg' },
+      { name: 'Vue.js', icon: 'https://raw.githubusercontent.com/devicons/devicon/master/icons/vuejs/vuejs-original.svg' },
+      { name: 'Angular', icon: 'https://raw.githubusercontent.com/devicons/devicon/master/icons/angularjs/angularjs-original.svg' },
+      { name: 'Tailwind CSS', icon: 'https://raw.githubusercontent.com/devicons/devicon/master/icons/tailwindcss/tailwindcss-original.svg' },
     ],
   },
   {
     name: 'Backend Development',
     skills: [
-      { name: 'Node.js', level: 90 },
-      { name: 'Python', level: 85 },
-      { name: 'Java', level: 80 },
-      { name: 'C#', level: 75 },
-      { name: 'Go', level: 70 },
+      { name: 'Node.js', icon: 'https://raw.githubusercontent.com/devicons/devicon/master/icons/nodejs/nodejs-original.svg' },
+      { name: 'Python', icon: 'https://raw.githubusercontent.com/devicons/devicon/master/icons/python/python-original.svg' },
+      { name: 'Java', icon: 'https://raw.githubusercontent.com/devicons/devicon/master/icons/java/java-original.svg' },
+      { name: 'C#', icon: 'https://raw.githubusercontent.com/devicons/devicon/master/icons/csharp/csharp-original.svg' },
+      { name: 'Go', icon: 'https://raw.githubusercontent.com/devicons/devicon/master/icons/go/go-original.svg' },
+      { name: 'FastAPI', icon: 'https://raw.githubusercontent.com/devicons/devicon/master/icons/fastapi/fastapi-original.svg' },
     ],
   },
   {
     name: 'Cloud & DevOps',
     skills: [
-      { name: 'AWS', level: 90 },
-      { name: 'Docker', level: 85 },
-      { name: 'Kubernetes', level: 80 },
-      { name: 'CI/CD', level: 85 },
-      { name: 'Terraform', level: 75 },
+      { name: 'AWS', icon: 'https://raw.githubusercontent.com/devicons/devicon/master/icons/amazonwebservices/amazonwebservices-plain-wordmark.svg' },
+      { name: 'Docker', icon: 'https://raw.githubusercontent.com/devicons/devicon/master/icons/docker/docker-original.svg' },
+      { name: 'Kubernetes', icon: 'https://raw.githubusercontent.com/devicons/devicon/master/icons/kubernetes/kubernetes-plain.svg' },
+      { name: 'Jenkins', icon: 'https://raw.githubusercontent.com/devicons/devicon/master/icons/jenkins/jenkins-original.svg' },
+      { name: 'Terraform', icon: 'https://raw.githubusercontent.com/devicons/devicon/master/icons/terraform/terraform-original.svg' },
     ],
   },
   {
     name: 'Databases',
     skills: [
-      { name: 'PostgreSQL', level: 90 },
-      { name: 'MongoDB', level: 85 },
-      { name: 'Redis', level: 80 },
-      { name: 'Elasticsearch', level: 75 },
-      { name: 'DynamoDB', level: 70 },
+      { name: 'PostgreSQL', icon: 'https://raw.githubusercontent.com/devicons/devicon/master/icons/postgresql/postgresql-original.svg' },
+      { name: 'MongoDB', icon: 'https://raw.githubusercontent.com/devicons/devicon/master/icons/mongodb/mongodb-original.svg' },
+      { name: 'Redis', icon: 'https://raw.githubusercontent.com/devicons/devicon/master/icons/redis/redis-original.svg' },
+      { name: 'Elasticsearch', icon: 'https://raw.githubusercontent.com/devicons/devicon/master/icons/elasticsearch/elasticsearch-original.svg' },
+      { name: 'DynamoDB', icon: 'https://raw.githubusercontent.com/devicons/devicon/master/icons/dynamodb/dynamodb-original.svg' },
     ],
   },
 ]
 
-function SkillBar({ name, level, index, isVisible }: { name: string; level: number; index: number; isVisible: boolean }) {
+function SkillCard({ skill, index, isVisible }: { skill: { name: string; icon: string }; index: number; isVisible: boolean }) {
   return (
-    <div className="mb-4">
-      <div className="flex justify-between mb-1">
-        <span className="text-sm font-medium text-gray-300">{name}</span>
-        <span className="text-sm font-medium text-gray-400">{level}%</span>
-      </div>
-      <div className="w-full bg-gray-700 rounded-full h-2.5">
-        <motion.div
-          className="bg-gradient-to-r from-blue-500 to-teal-400 h-2.5 rounded-full"
-          initial={{ width: 0 }}
-          animate={{ width: isVisible ? `${level}%` : 0 }}
-          transition={{ duration: 1, delay: index * 0.1 }}
+    <motion.div
+      initial={{ opacity: 0, scale: 0.5 }}
+      animate={isVisible ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.5 }}
+      transition={{ duration: 0.5, delay: index * 0.1 }}
+      whileHover={{ scale: 1.1, transition: { duration: 0.2 } }}
+      className="flex flex-col items-center bg-gray-800/50 backdrop-blur-sm rounded-xl p-6 mx-3 min-w-[140px] 
+                 transform hover:bg-gray-700/50 transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/20"
+    >
+      <div className="w-16 h-16 mb-4 relative group">
+        <img
+          src={skill.icon}
+          alt={skill.name}
+          className="w-full h-full object-contain filter group-hover:brightness-110 transition-all duration-300"
         />
       </div>
-    </div>
+      <span className="text-sm font-medium text-gray-300 text-center">{skill.name}</span>
+    </motion.div>
   )
 }
 
 function SkillCategory({ category, isVisible }: { category: typeof skillCategories[0]; isVisible: boolean }) {
   return (
-    <div className="bg-gray-800/50 backdrop-blur-sm rounded-lg p-6">
-      <h3 className="text-xl font-semibold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-teal-400">
+    <div className="mb-12">
+      <h3 className="text-xl font-semibold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-teal-400">
         {category.name}
       </h3>
-      <div>
-        {category.skills.map((skill, index) => (
-          <SkillBar
-            key={skill.name}
-            name={skill.name}
-            level={skill.level}
-            index={index}
-            isVisible={isVisible}
-          />
-        ))}
+      <div className="overflow-x-auto pb-4 hide-scrollbar">
+        <div className="flex space-x-4 animate-scroll">
+          {category.skills.map((skill, index) => (
+            <SkillCard
+              key={skill.name}
+              skill={skill}
+              index={index}
+              isVisible={isVisible}
+            />
+          ))}
+          {/* Duplicate the skills to create an infinite loop effect */}
+          {category.skills.map((skill, index) => (
+            <SkillCard
+              key={`${skill.name}-duplicate`}
+              skill={skill}
+              index={index + category.skills.length}
+              isVisible={isVisible}
+            />
+          ))}
+        </div>
       </div>
     </div>
   )
@@ -94,6 +109,30 @@ export default function SkillsSection() {
 
   return (
     <section id="skills" className="py-20 bg-gradient-to-b from-gray-900 to-black">
+      <style jsx global>{`
+        .hide-scrollbar::-webkit-scrollbar {
+          display: none;
+        }
+        .hide-scrollbar {
+          -ms-overflow-style: none;
+          scrollbar-width: none;
+        }
+        @keyframes scroll {
+          0% {
+            transform: translateX(0);
+          }
+          100% {
+            transform: translateX(-100%);
+          }
+        }
+        .animate-scroll {
+          animation: scroll 30s linear infinite;
+        }
+        .animate-scroll:hover {
+          animation-play-state: paused;
+        }
+      `}</style>
+      
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
           ref={ref}
@@ -106,11 +145,11 @@ export default function SkillsSection() {
             Technical Expertise
           </h2>
           <p className="text-gray-400 max-w-2xl mx-auto">
-            A comprehensive overview of my technical skills and proficiency levels across various domains of software development and architecture.
+            A showcase of the technologies and tools I work with to build modern, scalable solutions.
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div>
           {skillCategories.map((category) => (
             <motion.div
               key={category.name}
@@ -122,18 +161,7 @@ export default function SkillsSection() {
             </motion.div>
           ))}
         </div>
-
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-          transition={{ duration: 0.8, delay: 0.4 }}
-          className="mt-12 text-center"
-        >
-          <p className="text-gray-400 max-w-2xl mx-auto">
-            Additionally, I have extensive experience in system design, microservices architecture, and leading technical teams through complex projects.
-          </p>
-        </motion.div>
       </div>
     </section>
   )
-} 
+}

@@ -10,7 +10,7 @@ const HeroSection = dynamic(() => import('./sections/HeroSection'), { ssr: false
 const AboutSection = dynamic(() => import('./sections/AboutSection'), { ssr: false })
 const SkillsSection = dynamic(() => import('./sections/SkillsSection'), { ssr: false })
 const ProjectsSection = dynamic(() => import('./sections/ProjectsSection'), { ssr: false })
-// const ContactSection = dynamic(() => import('./sections/ContactSection'), { ssr: false })
+const ContactSection = dynamic(() => import('./sections/ContactSection'), { ssr: false })
 
 export default function Home() {
   const [mounted, setMounted] = useState(false)
@@ -37,7 +37,7 @@ export default function Home() {
           <AboutSection />
           <SkillsSection />
           <ProjectsSection />
-          
+          <ContactSection />
         </motion.div>
       </div>
     </main>
