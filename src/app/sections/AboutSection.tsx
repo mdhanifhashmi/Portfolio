@@ -3,6 +3,86 @@
 import { motion } from 'framer-motion'
 import { useInView } from 'react-intersection-observer'
 
+// Galaxy star particles
+const GalaxyStars = () => {
+  const stars = Array.from({ length: 50 }, (_, i) => ({
+    id: i,
+    x: Math.random() * 100,
+    y: Math.random() * 100,
+    size: Math.random() * 3 + 1,
+    duration: Math.random() * 3 + 2,
+  }))
+
+  return (
+    <div className="absolute inset-0 overflow-hidden">
+      {stars.map((star) => (
+        <motion.div
+          key={star.id}
+          className="absolute rounded-full bg-white"
+          style={{
+            width: star.size,
+            height: star.size,
+            left: `${star.x}%`,
+            top: `${star.y}%`,
+          }}
+          animate={{
+            opacity: [0.3, 1, 0.3],
+            scale: [1, 1.5, 1],
+          }}
+          transition={{
+            duration: star.duration,
+            repeat: Infinity,
+            repeatType: 'reverse',
+          }}
+        />
+      ))}
+    </div>
+  )
+}
+
+// Orbiting particles around About Section
+const OrbitingParticles = () => {
+  const particles = Array.from({ length: 6 }, (_, i) => ({
+    id: i,
+    angle: (i / 6) * 360,
+    delay: i * 0.15,
+  }))
+
+  return (
+    <div className="absolute inset-0 flex items-center justify-center overflow-hidden">
+      {particles.map((particle) => (
+        <motion.div
+          key={particle.id}
+          className="absolute w-3 h-3 bg-gradient-to-r from-blue-400 to-purple-400 rounded-full shadow-lg shadow-blue-500/50"
+          animate={{
+            rotate: 360,
+          }}
+          transition={{
+            duration: 20,
+            repeat: Infinity,
+            repeatType: 'loop',
+            delay: particle.delay,
+          }}
+          style={{
+            width: 200,
+            height: 200,
+          }}
+        >
+          <div
+            className="absolute w-3 h-3 bg-gradient-to-r from-blue-400 to-purple-400 rounded-full"
+            style={{
+              top: 0,
+              left: '50%',
+              transform: 'translateX(-50%)',
+              boxShadow: '0 0 10px rgba(59, 130, 246, 0.6)',
+            }}
+          />
+        </motion.div>
+      ))}
+    </div>
+  )
+}
+
 export default function AboutSection() {
   const [ref, inView] = useInView({
     triggerOnce: true,
@@ -30,8 +110,38 @@ export default function AboutSection() {
   }
 
   return (
-    <section id="about" className="py-20 bg-gradient-to-b from-black to-gray-900">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+    <section id="about" className="py-20 bg-gradient-to-b from-black to-gray-900 relative overflow-hidden">
+      {/* Galaxy Background */}
+      <GalaxyStars />
+      <OrbitingParticles />
+
+      {/* Gradient blobs */}
+      <motion.div
+        className="absolute top-20 right-10 w-72 h-72 bg-purple-600 rounded-full mix-blend-multiply filter blur-3xl opacity-15"
+        animate={{
+          y: [0, 40, 0],
+          x: [0, 30, 0],
+        }}
+        transition={{
+          duration: 8,
+          repeat: Infinity,
+          repeatType: 'reverse',
+        }}
+      />
+      <motion.div
+        className="absolute bottom-20 left-10 w-72 h-72 bg-blue-600 rounded-full mix-blend-multiply filter blur-3xl opacity-15"
+        animate={{
+          y: [0, -40, 0],
+          x: [0, -30, 0],
+        }}
+        transition={{
+          duration: 8,
+          repeat: Infinity,
+          repeatType: 'reverse',
+        }}
+      />
+
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <motion.div
           ref={ref}
           variants={containerVariants}

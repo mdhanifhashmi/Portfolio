@@ -3,6 +3,79 @@
 import { motion } from 'framer-motion'
 import { useInView } from 'react-intersection-observer'
 
+// Galaxy Nebula Background
+const GalaxyNebula = () => {
+  const nebulas = Array.from({ length: 40 }, (_, i) => ({
+    id: i,
+    x: Math.random() * 100,
+    y: Math.random() * 100,
+    size: Math.random() * 200 + 100,
+    duration: Math.random() * 10 + 8,
+    color: ['from-blue-500', 'from-purple-500', 'from-pink-500'][Math.floor(Math.random() * 3)],
+  }))
+
+  return (
+    <div className="absolute inset-0 overflow-hidden">
+      {nebulas.map((nebula) => (
+        <motion.div
+          key={nebula.id}
+          className={`absolute rounded-full mix-blend-screen filter blur-3xl opacity-10`}
+          style={{
+            width: nebula.size,
+            height: nebula.size,
+            left: `${nebula.x}%`,
+            top: `${nebula.y}%`,
+            background: `radial-gradient(circle, rgba(59, 130, 246, 0.3), transparent)`,
+          }}
+          animate={{
+            x: [0, 50, -50, 0],
+            y: [0, -50, 50, 0],
+          }}
+          transition={{
+            duration: nebula.duration,
+            repeat: Infinity,
+            repeatType: 'reverse',
+          }}
+        />
+      ))}
+    </div>
+  )
+}
+
+// Floating cosmic particles
+const CosmicParticles = () => {
+  const particles = Array.from({ length: 60 }, (_, i) => ({
+    id: i,
+    x: Math.random() * 100,
+    y: Math.random() * 100,
+    delay: Math.random() * 5,
+  }))
+
+  return (
+    <div className="absolute inset-0">
+      {particles.map((particle) => (
+        <motion.div
+          key={particle.id}
+          className="absolute w-1 h-1 bg-white rounded-full"
+          style={{
+            left: `${particle.x}%`,
+            top: `${particle.y}%`,
+          }}
+          animate={{
+            opacity: [0, 1, 0],
+            y: [0, -100, -200],
+          }}
+          transition={{
+            duration: Math.random() * 3 + 2,
+            repeat: Infinity,
+            delay: particle.delay,
+          }}
+        />
+      ))}
+    </div>
+  )
+}
+
 const skillCategories = [
   {
     name: 'Frontend Development',
@@ -108,7 +181,7 @@ export default function SkillsSection() {
   })
 
   return (
-    <section id="skills" className="py-20 bg-gradient-to-b from-gray-900 to-black">
+    <section id="skills" className="py-20 bg-gradient-to-b from-gray-900 to-black relative overflow-hidden">
       <style jsx global>{`
         .hide-scrollbar::-webkit-scrollbar {
           display: none;
@@ -132,8 +205,26 @@ export default function SkillsSection() {
           animation-play-state: paused;
         }
       `}</style>
+
+      {/* Galaxy Background */}
+      <GalaxyNebula />
+      <CosmicParticles />
+
+      {/* Moving gradient orbs */}
+      <motion.div
+        className="absolute top-1/3 right-0 w-96 h-96 bg-cyan-500 rounded-full mix-blend-screen filter blur-3xl opacity-10"
+        animate={{
+          x: [0, 100, 0],
+          y: [0, 50, 0],
+        }}
+        transition={{
+          duration: 12,
+          repeat: Infinity,
+          repeatType: 'reverse',
+        }}
+      />
       
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <motion.div
           ref={ref}
           initial={{ opacity: 0, y: 20 }}

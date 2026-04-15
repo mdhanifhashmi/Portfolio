@@ -4,6 +4,94 @@ import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { useInView } from 'react-intersection-observer'
 
+// Orbiting planets effect for projects
+const OrbitingProjects = ({ projectCount }: { projectCount: number }) => {
+  const orbits = Array.from({ length: projectCount }, (_, i) => ({
+    id: i,
+    angle: (i / projectCount) * 360,
+    radius: 120 + i * 30,
+    delay: i * 0.2,
+  }))
+
+  return (
+    <div className="absolute inset-0 flex items-center justify-center overflow-hidden">
+      {orbits.map((orbit) => (
+        <motion.div
+          key={orbit.id}
+          className="absolute border border-blue-500/20 rounded-full"
+          style={{
+            width: orbit.radius * 2,
+            height: orbit.radius * 2,
+          }}
+          animate={{
+            rotate: 360,
+          }}
+          transition={{
+            duration: 30 + orbit.id * 5,
+            repeat: Infinity,
+            repeatType: 'loop',
+            ease: 'linear',
+          }}
+        >
+          <motion.div
+            className="absolute w-2 h-2 bg-gradient-to-r from-blue-400 to-cyan-400 rounded-full"
+            style={{
+              top: 0,
+              left: '50%',
+              transform: 'translateX(-50%)',
+              boxShadow: '0 0 10px rgba(34, 197, 235, 0.8)',
+            }}
+            animate={{
+              scale: [1, 1.5, 1],
+            }}
+            transition={{
+              duration: 2,
+              repeat: Infinity,
+            }}
+          />
+        </motion.div>
+      ))}
+    </div>
+  )
+}
+
+// Cosmic dust particles
+const CosmicDust = () => {
+  const particles = Array.from({ length: 100 }, (_, i) => ({
+    id: i,
+    x: Math.random() * 100,
+    y: Math.random() * 100,
+    size: Math.random() * 2 + 0.5,
+    duration: Math.random() * 4 + 3,
+  }))
+
+  return (
+    <div className="absolute inset-0 overflow-hidden">
+      {particles.map((particle) => (
+        <motion.div
+          key={particle.id}
+          className="absolute bg-white rounded-full opacity-50"
+          style={{
+            width: particle.size,
+            height: particle.size,
+            left: `${particle.x}%`,
+            top: `${particle.y}%`,
+          }}
+          animate={{
+            y: [0, -200, -400],
+            opacity: [0.5, 1, 0],
+          }}
+          transition={{
+            duration: particle.duration,
+            repeat: Infinity,
+            delay: Math.random() * 2,
+          }}
+        />
+      ))}
+    </div>
+  )
+}
+
 const projects = [
   {
     title: 'Enterprise Cloud Migration',
@@ -43,9 +131,10 @@ function ProjectCard({ project, index }: { project: typeof projects[0]; index: n
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay: index * 0.1 }}
-      className="bg-gray-800/50 backdrop-blur-sm rounded-lg overflow-hidden transform transition-all duration-300 hover:scale-105"
-      onHoverStart={() => setIsHovered(true)}
-      onHoverEnd={() => setIsHovered(false)}
+      className="bg-gray-800/50 backdrop-blur-sm rounded-lg overflow-hidden"
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+      whileHover={{ scale: 1.05 }}
     >
       <div className="p-6">
         <h3 className="text-xl font-bold mb-3 bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-teal-400">
@@ -79,10 +168,11 @@ function ProjectCard({ project, index }: { project: typeof projects[0]; index: n
       </div>
 
       <motion.div
-        className="h-1 bg-gradient-to-r from-blue-500 to-teal-400"
-        initial={{ width: '0%' }}
-        animate={{ width: isHovered ? '100%' : '0%' }}
-        transition={{ duration: 0.3 }}
+        className="h-1 w-full bg-gradient-to-r from-blue-500 to-teal-400"
+        initial={{ scaleX: 0 }}
+        animate={{ scaleX: isHovered ? 1 : 0 }}
+        transition={{ duration: 0.3, ease: 'easeInOut' }}
+        style={{ originX: 0 }}
       />
     </motion.div>
   )
@@ -95,8 +185,24 @@ export default function ProjectsSection() {
   })
 
   return (
-    <section id="projects" className="py-20 bg-gradient-to-b from-gray-900 to-black">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+    <section id="projects" className="py-20 bg-gradient-to-b from-gray-900 to-black relative overflow-hidden">
+      {/* Galaxy Background */}
+      <OrbitingProjects projectCount={projects.length} />
+      <CosmicDust />
+      <motion.div
+        className="absolute top-0 left-1/2 transform -translate-x-1/2 w-96 h-96 bg-purple-600 rounded-full mix-blend-screen filter blur-3xl opacity-10"
+        animate={{
+          scale: [1, 1.2, 1],
+          opacity: [0.1, 0.15, 0.1],
+        }}
+        transition={{
+          duration: 6,
+          repeat: Infinity,
+          repeatType: 'reverse',
+        }}
+      />
+
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <motion.div
           ref={ref}
           initial={{ opacity: 0, y: 20 }}

@@ -2,6 +2,153 @@
 
 import { motion } from 'framer-motion'
 import { FaGithub, FaLinkedin, FaEnvelope, FaPhone, FaGlobe } from 'react-icons/fa'
+import { useEffect, useRef } from 'react'
+
+// Floating galaxy stars and particles
+const FloatingStars = () => {
+  const stars = Array.from({ length: 80 }, (_, i) => ({
+    id: i,
+    x: Math.random() * 100,
+    y: Math.random() * 100,
+    size: Math.random() * 2 + 0.5,
+    duration: Math.random() * 5 + 3,
+    delay: Math.random() * 3,
+  }))
+
+  return (
+    <div className="absolute inset-0 overflow-hidden">
+      {stars.map((star) => (
+        <motion.div
+          key={star.id}
+          className="absolute bg-white rounded-full"
+          style={{
+            width: star.size,
+            height: star.size,
+            left: `${star.x}%`,
+            top: `${star.y}%`,
+          }}
+          animate={{
+            opacity: [0.3, 1, 0.3],
+            scale: [0.5, 1, 0.5],
+            y: [0, -50, 0],
+          }}
+          transition={{
+            duration: star.duration,
+            repeat: Infinity,
+            delay: star.delay,
+          }}
+        />
+      ))}
+    </div>
+  )
+}
+
+// Canvas-based Black Hole Particle System
+const CanvasBlackHole = () => {
+  const canvasRef = useRef(null)
+
+  useEffect(() => {
+    const canvas = canvasRef.current
+    if (!canvas) return
+
+    const ctx = canvas.getContext('2d')
+    if (!ctx) return
+
+    // Set canvas size
+    canvas.width = canvas.offsetWidth
+    canvas.height = canvas.offsetHeight
+
+    // Particle class
+    class Particle {
+      constructor(x, y, distance) {
+        this.angle = Math.random() * 2 * Math.PI
+        this.radius = Math.random() * 1.5
+        this.opacity = (Math.random() * 5 + 2) / 10
+        this.distance = (1 / this.opacity) * distance
+        this.speed = this.distance * 0.00003
+        this.x = x
+        this.y = y
+      }
+
+      draw() {
+        const x = this.x + this.distance * Math.cos(this.angle)
+        const y = this.y + this.distance * Math.sin(this.angle)
+        
+        ctx.fillStyle = `rgba(59, 130, 246, ${this.opacity})`
+        ctx.beginPath()
+        ctx.arc(x, y, this.radius, 0, Math.PI * 2)
+        ctx.fill()
+      }
+
+      update() {
+        this.angle += this.speed
+        this.draw()
+      }
+    }
+
+    // Emitter class
+    class Emitter {
+      constructor(x, y) {
+        this.x = x
+        this.y = y
+        this.radius = 40
+        this.particles = []
+
+        for (let i = 0; i < 2000; i++) {
+          this.particles.push(new Particle(this.x, this.y, this.radius))
+        }
+      }
+
+      draw() {
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.95)'
+        ctx.beginPath()
+        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2)
+        ctx.fill()
+
+        // Glow around black hole
+        ctx.strokeStyle = 'rgba(59, 130, 246, 0.3)'
+        ctx.lineWidth = 3
+        ctx.beginPath()
+        ctx.arc(this.x, this.y, this.radius + 5, 0, Math.PI * 2)
+        ctx.stroke()
+      }
+
+      update() {
+        for (let i = 0; i < this.particles.length; i++) {
+          this.particles[i].update()
+        }
+        this.draw()
+      }
+    }
+
+    const emitter = new Emitter(canvas.width / 2, canvas.height / 2)
+
+    const animate = () => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height)
+      emitter.update()
+      requestAnimationFrame(animate)
+    }
+
+    animate()
+
+    // Handle window resize
+    const handleResize = () => {
+      canvas.width = canvas.offsetWidth
+      canvas.height = canvas.offsetHeight
+    }
+
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
+  }, [])
+
+  return (
+    <canvas
+      ref={canvasRef}
+      className="absolute inset-0 w-full h-full"
+      style={{ display: 'block' }}
+    />
+  )
+}
 
 const contactInfo = {
   email: 'mdhanifhashmi@gmail.com',
@@ -13,8 +160,39 @@ const contactInfo = {
 
 export default function ContactSection() {
   return (
-    <section id="contact" className="py-20 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-7xl mx-auto">
+    <section id="contact" className="py-20 px-4 sm:px-6 lg:px-8 relative overflow-hidden bg-gradient-to-b from-black to-gray-900">
+      {/* Galaxy background */}
+      <FloatingStars />
+      <CanvasBlackHole />
+
+      {/* Glowing gradient orbs */}
+      <motion.div
+        className="absolute top-1/4 left-1/4 w-80 h-80 bg-blue-500 rounded-full mix-blend-screen filter blur-3xl opacity-10"
+        animate={{
+          x: [0, 100, 0],
+          y: [0, -50, 0],
+        }}
+        transition={{
+          duration: 15,
+          repeat: Infinity,
+          repeatType: 'reverse',
+        }}
+      />
+
+      <motion.div
+        className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-purple-500 rounded-full mix-blend-screen filter blur-3xl opacity-10"
+        animate={{
+          x: [0, -100, 0],
+          y: [0, 50, 0],
+        }}
+        transition={{
+          duration: 15,
+          repeat: Infinity,
+          repeatType: 'reverse',
+        }}
+      />
+
+      <div className="max-w-7xl mx-auto relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
