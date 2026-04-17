@@ -133,7 +133,7 @@ const CosmicDustHero = () => {
     id: i,
     x: Math.random() * 100,
     y: Math.random() * 100,
-    size: Math.random() * 1.5 + 0.3,
+    size: 4,
     duration: Math.random() * 4 + 3,
     delay: Math.random() * 3,
   }))
