@@ -2,7 +2,6 @@
 
 import { motion } from 'framer-motion'
 import { TypeAnimation } from 'react-type-animation'
-import { useState, useEffect } from 'react'
 
 // Animated Background Gradient
 const AnimatedBg = () => {
@@ -212,17 +211,6 @@ const Meteors = () => {
 }
 
 export default function HeroSection() {
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
-
-  useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
-      setMousePosition({ x: e.clientX, y: e.clientY })
-    }
-
-    window.addEventListener('mousemove', handleMouseMove)
-    return () => window.removeEventListener('mousemove', handleMouseMove)
-  }, [])
-
   return (
     <section id="home" className="min-h-screen flex items-center justify-center relative overflow-hidden bg-black">
       {/* Background Animations */}
@@ -231,20 +219,6 @@ export default function HeroSection() {
       <CosmicDustHero />
       <FloatingParticles />
       <Meteors />
-
-      {/* Cursor-tracking glow effect */}
-      <motion.div
-        className="absolute w-96 h-96 bg-gradient-to-r from-blue-500/20 to-cyan-400/20 rounded-full filter blur-3xl pointer-events-none"
-        animate={{
-          x: mousePosition.x - 192,
-          y: mousePosition.y - 192,
-        }}
-        transition={{
-          type: 'spring',
-          damping: 35,
-          stiffness: 150,
-        }}
-      />
 
       {/* Content */}
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
