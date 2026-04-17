@@ -1,10 +1,11 @@
 'use client'
 
+import { memo, useMemo } from 'react'
 import { motion } from 'framer-motion'
 import { TypeAnimation } from 'react-type-animation'
 
 // Animated Background Gradient
-const AnimatedBg = () => {
+const AnimatedBg = memo(() => {
   return (
     <div className="absolute inset-0 overflow-hidden">
       {/* Main gradient blobs - simplified and optimized */}
@@ -15,10 +16,11 @@ const AnimatedBg = () => {
           x: [0, 30, 0],
         }}
         transition={{
-          duration: 8,
+          duration: 15,
           repeat: Infinity,
           repeatType: 'reverse',
         }}
+        style={{ willChange: 'transform' }}
       />
       <motion.div
         className="absolute top-1/2 -right-32 w-96 h-96 bg-purple-600 rounded-full mix-blend-multiply filter blur-3xl opacity-25"
@@ -27,37 +29,44 @@ const AnimatedBg = () => {
           x: [0, -30, 0],
         }}
         transition={{
-          duration: 10,
+          duration: 18,
           repeat: Infinity,
           repeatType: 'reverse',
         }}
+        style={{ willChange: 'transform' }}
       />
       <motion.div
         className="absolute -bottom-32 left-1/3 w-80 h-80 bg-cyan-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20"
         animate={{
-          scale: [1, 1.2, 1],
+          scale: [1, 1.15, 1],
           y: [0, 40, 0],
         }}
         transition={{
-          duration: 12,
+          duration: 20,
           repeat: Infinity,
           repeatType: 'reverse',
         }}
+        style={{ willChange: 'transform' }}
       />
     </div>
   )
-}
+})
+AnimatedBg.displayName = 'AnimatedBg'
 
-// Animated Floating Particles
-const FloatingParticles = () => {
-  const particles = Array.from({ length: 60 }, (_, i) => ({
-    id: i,
-    x: Math.random() * 100,
-    y: Math.random() * 100,
-    size: Math.random() * 2 + 1,
-    duration: Math.random() * 3 + 3,
-    delay: Math.random() * 2,
-  }))
+// Optimized Floating Particles
+const FloatingParticles = memo(() => {
+  const particles = useMemo(
+    () =>
+      Array.from({ length: 20 }, (_, i) => ({
+        id: i,
+        x: Math.random() * 100,
+        y: Math.random() * 100,
+        size: Math.random() * 2 + 1,
+        duration: Math.random() * 4 + 4,
+        delay: Math.random() * 2,
+      })),
+    []
+  )
 
   return (
     <div className="absolute inset-0 overflow-hidden">
@@ -71,10 +80,10 @@ const FloatingParticles = () => {
             left: `${p.x}%`,
             top: `${p.y}%`,
             boxShadow: `0 0 ${p.size * 3}px rgba(59, 130, 246, 0.6)`,
+            willChange: 'opacity',
           }}
           animate={{
-            opacity: [0.1, 0.8, 0.1],
-            scale: [0.5, 1.5, 0.5],
+            opacity: [0.1, 0.6, 0.1],
           }}
           transition={{
             duration: p.duration,
@@ -85,18 +94,23 @@ const FloatingParticles = () => {
       ))}
     </div>
   )
-}
+})
+FloatingParticles.displayName = 'FloatingParticles'
 
-// Hero Galaxy Stars - 100 twinkling stars
-const HeroGalaxyStars = () => {
-  const stars = Array.from({ length: 100 }, (_, i) => ({
-    id: i,
-    x: Math.random() * 100,
-    y: Math.random() * 100,
-    size: Math.random() * 2 + 0.5,
-    duration: Math.random() * 3 + 2,
-    delay: Math.random() * 2,
-  }))
+// Optimized Hero Galaxy Stars
+const HeroGalaxyStars = memo(() => {
+  const stars = useMemo(
+    () =>
+      Array.from({ length: 30 }, (_, i) => ({
+        id: i,
+        x: Math.random() * 100,
+        y: Math.random() * 100,
+        size: Math.random() * 1.5 + 0.5,
+        duration: Math.random() * 4 + 3,
+        delay: Math.random() * 3,
+      })),
+    []
+  )
 
   return (
     <div className="absolute inset-0 overflow-hidden">
@@ -110,10 +124,10 @@ const HeroGalaxyStars = () => {
             left: `${star.x}%`,
             top: `${star.y}%`,
             boxShadow: `0 0 ${star.size * 2}px rgba(255, 255, 255, 0.8)`,
+            willChange: 'opacity',
           }}
           animate={{
-            opacity: [0.2, 1, 0.2],
-            scale: [0.8, 1.2, 0.8],
+            opacity: [0.2, 0.8, 0.2],
           }}
           transition={{
             duration: star.duration,
@@ -125,18 +139,23 @@ const HeroGalaxyStars = () => {
       ))}
     </div>
   )
-}
+})
+HeroGalaxyStars.displayName = 'HeroGalaxyStars'
 
-// Cosmic Dust Effect - 150 particles rising
-const CosmicDustHero = () => {
-  const particles = Array.from({ length: 150 }, (_, i) => ({
-    id: i,
-    x: Math.random() * 100,
-    y: Math.random() * 100,
-    size: 4,
-    duration: Math.random() * 4 + 3,
-    delay: Math.random() * 3,
-  }))
+// Optimized Cosmic Dust Effect
+const CosmicDustHero = memo(() => {
+  const particles = useMemo(
+    () =>
+      Array.from({ length: 40 }, (_, i) => ({
+        id: i,
+        x: Math.random() * 100,
+        y: Math.random() * 100,
+        size: 3,
+        duration: Math.random() * 5 + 4,
+        delay: Math.random() * 3,
+      })),
+    []
+  )
 
   return (
     <div className="absolute inset-0 overflow-hidden">
@@ -150,12 +169,11 @@ const CosmicDustHero = () => {
             left: `${particle.x}%`,
             top: `${particle.y}%`,
             background: `radial-gradient(circle, rgba(200, 200, 255, 0.8), rgba(100, 150, 255, 0))`,
+            willChange: 'transform, opacity',
           }}
           animate={{
-            y: [0, -150, -300],
-            x: [0, (Math.random() - 0.5) * 100, 0],
-            opacity: [0.5, 1, 0],
-            scale: [0, 1, 0.5],
+            y: [0, -200, -400],
+            opacity: [0.4, 0.7, 0],
           }}
           transition={{
             duration: particle.duration,
@@ -167,17 +185,22 @@ const CosmicDustHero = () => {
       ))}
     </div>
   )
-}
+})
+CosmicDustHero.displayName = 'CosmicDustHero'
 
-// Meteor showers - small smooth
-const Meteors = () => {
-  const meteors = Array.from({ length: 6 }, (_, i) => ({
-    id: i,
-    startX: Math.random() * 100,
-    startY: Math.random() * 40,
-    delay: i * 2,
-    size: Math.random() * 0.8 + 0.5,
-  }))
+// Simplified Meteors
+const Meteors = memo(() => {
+  const meteors = useMemo(
+    () =>
+      Array.from({ length: 3 }, (_, i) => ({
+        id: i,
+        startX: Math.random() * 100,
+        startY: Math.random() * 40,
+        delay: i * 4,
+        size: Math.random() * 0.6 + 0.4,
+      })),
+    []
+  )
 
   return (
     <div className="absolute inset-0 overflow-hidden">
@@ -191,24 +214,26 @@ const Meteors = () => {
             left: `${meteor.startX}%`,
             top: `${meteor.startY}%`,
             boxShadow: `0 0 ${meteor.size * 4}px rgba(255, 200, 0, 0.6)`,
+            willChange: 'transform, opacity',
           }}
           animate={{
-            x: [0, 200],
-            y: [0, 400],
+            x: [0, 150],
+            y: [0, 350],
             opacity: [0.8, 0.2, 0],
           }}
           transition={{
-            duration: 3,
+            duration: 4,
             delay: meteor.delay,
             repeat: Infinity,
-            repeatDelay: 5,
+            repeatDelay: 8,
             ease: 'easeIn',
           }}
         />
       ))}
     </div>
   )
-}
+})
+Meteors.displayName = 'Meteors'
 
 export default function HeroSection() {
   return (
@@ -245,13 +270,15 @@ export default function HeroSection() {
           >
             <TypeAnimation
               sequence={[
-                'Entry Level Software Engineer',
+                'Software Developer',
                 2000,
                 'Full Stack Developer',
                 2000,
-                'Tech Lead',
+                'Ai Enthusiast',
                 2000,
-                'Cloud Architect',
+                'Backend Engineer',
+                2000,
+                'Rest API Developer',
                 2000,
               ]}
               wrapper="span"
@@ -266,7 +293,7 @@ export default function HeroSection() {
             transition={{ delay: 0.6, duration: 0.8 }}
             className="text-lg text-gray-400 mb-12 max-w-2xl mx-auto"
           >
-            Driven to transform complex challenges into elegant solutions, I am eager to apply my foundational skills in software engineering and collaborate with experienced teams to develop innovative solutions and grow as a professional.
+            Driven by a passion for transforming complex problems into clean, scalable solutions, I bring hands-on software engineering experience and a proven ability to deliver high-impact results. I thrive in collaborative environments, working alongside talented teams to build innovative systems that solve real-world challenges while continuously advancing my expertise.
           </motion.p>
 
           <motion.div

@@ -2,19 +2,24 @@
 
 import { motion } from 'framer-motion'
 import { useInView } from 'react-intersection-observer'
+import { useMemo, memo } from 'react'
 
-// Galaxy star particles
-const GalaxyStars = () => {
-  const stars = Array.from({ length: 50 }, (_, i) => ({
-    id: i,
-    x: Math.random() * 100,
-    y: Math.random() * 100,
-    size: Math.random() * 3 + 1,
-    duration: Math.random() * 3 + 2,
-  }))
+// Galaxy star particles - OPTIMIZED: 50 → 20 stars, removed scale animation
+const GalaxyStars = memo(() => {
+  const stars = useMemo(
+    () =>
+      Array.from({ length: 20 }, (_, i) => ({
+        id: i,
+        x: Math.random() * 100,
+        y: Math.random() * 100,
+        size: Math.random() * 3 + 1,
+        duration: Math.random() * 3 + 2,
+      })),
+    []
+  )
 
   return (
-    <div className="absolute inset-0 overflow-hidden">
+    <div className="absolute inset-0 overflow-hidden pointer-events-none">
       {stars.map((star) => (
         <motion.div
           key={star.id}
@@ -24,10 +29,10 @@ const GalaxyStars = () => {
             height: star.size,
             left: `${star.x}%`,
             top: `${star.y}%`,
+            willChange: 'opacity',
           }}
           animate={{
-            opacity: [0.3, 1, 0.3],
-            scale: [1, 1.5, 1],
+            opacity: [0.3, 0.8, 0.3],
           }}
           transition={{
             duration: star.duration,
@@ -38,18 +43,22 @@ const GalaxyStars = () => {
       ))}
     </div>
   )
-}
+})
 
-// Orbiting particles around About Section
-const OrbitingParticles = () => {
-  const particles = Array.from({ length: 6 }, (_, i) => ({
-    id: i,
-    angle: (i / 6) * 360,
-    delay: i * 0.15,
-  }))
+// Orbiting particles around About Section - OPTIMIZED: 6 → 4 particles, removed scale animation
+const OrbitingParticles = memo(() => {
+  const particles = useMemo(
+    () =>
+      Array.from({ length: 4 }, (_, i) => ({
+        id: i,
+        angle: (i / 4) * 360,
+        delay: i * 0.15,
+      })),
+    []
+  )
 
   return (
-    <div className="absolute inset-0 flex items-center justify-center overflow-hidden">
+    <div className="absolute inset-0 flex items-center justify-center overflow-hidden pointer-events-none">
       {particles.map((particle) => (
         <motion.div
           key={particle.id}
@@ -58,14 +67,16 @@ const OrbitingParticles = () => {
             rotate: 360,
           }}
           transition={{
-            duration: 20,
+            duration: 25,
             repeat: Infinity,
             repeatType: 'loop',
             delay: particle.delay,
+            ease: 'linear',
           }}
           style={{
             width: 200,
             height: 200,
+            willChange: 'transform',
           }}
         >
           <div
@@ -81,7 +92,73 @@ const OrbitingParticles = () => {
       ))}
     </div>
   )
-}
+})
+
+// Cosmic Dust Effect - Rising particles - OPTIMIZED: 120 → 35 particles, removed scale animation
+const CosmicDustAbout = memo(() => {
+  const particles = useMemo(
+    () =>
+      Array.from({ length: 35 }, (_, i) => ({
+        id: i,
+        x: Math.random() * 100,
+        y: Math.random() * 100,
+        size: 4,
+        duration: Math.random() * 4 + 3,
+        delay: Math.random() * 3,
+      })),
+    []
+  )
+
+  return (
+    <div className="absolute inset-0 overflow-hidden pointer-events-none">
+      {particles.map((particle) => (
+        <motion.div
+          key={particle.id}
+          className="absolute rounded-full"
+          style={{
+            width: particle.size,
+            height: particle.size,
+            left: `${particle.x}%`,
+            top: `${particle.y}%`,
+            background: `radial-gradient(circle, rgba(200, 200, 255, 0.8), rgba(100, 150, 255, 0))`,
+            willChange: 'transform, opacity',
+          }}
+          animate={{
+            y: [0, -150, -300],
+            x: [0, (Math.random() - 0.5) * 50, 0],
+            opacity: [0.5, 0.8, 0],
+          }}
+          transition={{
+            duration: particle.duration,
+            repeat: Infinity,
+            delay: particle.delay,
+            ease: 'easeOut',
+          }}
+        />
+      ))}
+    </div>
+  )
+})
+
+// Center cyan sphere for visual depth
+const CenterSphere = memo(() => (
+  <motion.div
+    className="absolute top-1/2 left-1/2 w-32 h-32 -translate-x-1/2 -translate-y-1/2 rounded-full bg-gradient-to-br from-cyan-400 to-blue-500 blur-2xl pointer-events-none"
+    animate={{
+      scale: [1, 1.15, 1],
+      opacity: [0.4, 0.6, 0.4],
+    }}
+    transition={{
+      duration: 4,
+      repeat: Infinity,
+      repeatType: 'reverse',
+      ease: 'easeInOut',
+    }}
+    style={{
+      willChange: 'transform, opacity',
+    }}
+  />
+))
 
 export default function AboutSection() {
   const [ref, inView] = useInView({
@@ -114,6 +191,8 @@ export default function AboutSection() {
       {/* Galaxy Background */}
       <GalaxyStars />
       <OrbitingParticles />
+      <CosmicDustAbout />
+      <CenterSphere />
 
       {/* Gradient blobs */}
       <motion.div
@@ -154,20 +233,20 @@ export default function AboutSection() {
             <div className="relative z-10">
               <h3 className="text-2xl font-bold text-white mb-4">Professional Journey</h3>
               <p className="text-gray-300 mb-6">
-              Hyped about technology and innovation, seeking a role as a software engineer where I can apply my skills and knowledge to create cutting-edge solutions that solve real-world problems.
+              Results-driven Software Developer and Full Stack Engineer with a strong foundation in backend development and REST API design. Passionate about building scalable solutions and exploring AI applications. Seeking a challenging role as a Full Stack Developer or Backend Engineer to deliver innovative, high-impact systems.
               </p>
               <div className="space-y-4">
                 <div className="flex items-center">
                   <div className="w-2 h-2 bg-blue-500 rounded-full mr-3"></div>
-                  <span className="text-gray-300">Technical Leadership & Team Management</span>
+                  <span className="text-gray-300">Full-Stack & Backend Development</span>
                 </div>
                 <div className="flex items-center">
                   <div className="w-2 h-2 bg-purple-500 rounded-full mr-3"></div>
-                  <span className="text-gray-300">Enterprise Architecture Design</span>
+                  <span className="text-gray-300">RESTful API Development</span>
                 </div>
                 <div className="flex items-center">
                   <div className="w-2 h-2 bg-teal-500 rounded-full mr-3"></div>
-                  <span className="text-gray-300">Cloud Infrastructure & DevOps</span>
+                  <span className="text-gray-300">Enterprise System Design</span>
                 </div>
               </div>
             </div>
@@ -180,7 +259,7 @@ export default function AboutSection() {
             
             <div className="space-y-6 text-gray-300">
               <p>
-                My journey is just beginning, and I am excited to apply my foundational skills in software development to contribute to innovative projects. I am interested in exploring full-stack development, cloud architecture, and other emerging technologies.
+                I am a passionate software engineer with proven experience in designing and developing robust applications. My expertise spans full-stack development, Rest API developer, and several frameworks.
               </p>
               
               <p>
@@ -190,12 +269,12 @@ export default function AboutSection() {
               <div className="grid grid-cols-2 gap-4 mt-8">
                 <div className="bg-gray-800/50 p-4 rounded-lg backdrop-blur-sm">
                   <h3 className="font-semibold text-lg mb-2 text-blue-400">Vision</h3>
-                  <p className="text-sm text-gray-400">Driving innovation through technology and leadership</p>
+                  <p className="text-sm text-gray-400">Driving innovation through technology, leadership, and impactful problem-solving</p>
                 </div>
                 
                 <div className="bg-gray-800/50 p-4 rounded-lg backdrop-blur-sm">
                   <h3 className="font-semibold text-lg mb-2 text-purple-400">Mission</h3>
-                  <p className="text-sm text-gray-400">Building scalable solutions for tomorrow&apos;s challenges</p>
+                  <p className="text-sm text-gray-400">Building scalable, future-ready solutions that solve real-world challenges and create lasting value</p>
                 </div>
               </div>
             </div>

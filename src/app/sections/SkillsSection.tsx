@@ -1,35 +1,40 @@
 'use client'
 
+import { memo, useMemo } from 'react'
 import { motion } from 'framer-motion'
 import { useInView } from 'react-intersection-observer'
 
-// Galaxy Nebula Background
-const GalaxyNebula = () => {
-  const nebulas = Array.from({ length: 40 }, (_, i) => ({
-    id: i,
-    x: Math.random() * 100,
-    y: Math.random() * 100,
-    size: Math.random() * 200 + 100,
-    duration: Math.random() * 10 + 8,
-    color: ['from-blue-500', 'from-purple-500', 'from-pink-500'][Math.floor(Math.random() * 3)],
-  }))
+// Optimized Galaxy Nebula Background
+const GalaxyNebula = memo(() => {
+  const nebulas = useMemo(
+    () =>
+      Array.from({ length: 15 }, (_, i) => ({
+        id: i,
+        x: Math.random() * 100,
+        y: Math.random() * 100,
+        size: Math.random() * 200 + 100,
+        duration: Math.random() * 15 + 12,
+      })),
+    []
+  )
 
   return (
     <div className="absolute inset-0 overflow-hidden">
       {nebulas.map((nebula) => (
         <motion.div
           key={nebula.id}
-          className={`absolute rounded-full mix-blend-screen filter blur-3xl opacity-10`}
+          className="absolute rounded-full mix-blend-screen filter blur-3xl opacity-10"
           style={{
             width: nebula.size,
             height: nebula.size,
             left: `${nebula.x}%`,
             top: `${nebula.y}%`,
             background: `radial-gradient(circle, rgba(59, 130, 246, 0.3), transparent)`,
+            willChange: 'transform',
           }}
           animate={{
-            x: [0, 50, -50, 0],
-            y: [0, -50, 50, 0],
+            x: [0, 30, -30, 0],
+            y: [0, -30, 30, 0],
           }}
           transition={{
             duration: nebula.duration,
@@ -40,16 +45,21 @@ const GalaxyNebula = () => {
       ))}
     </div>
   )
-}
+})
+GalaxyNebula.displayName = 'GalaxyNebula'
 
-// Floating cosmic particles
-const CosmicParticles = () => {
-  const particles = Array.from({ length: 60 }, (_, i) => ({
-    id: i,
-    x: Math.random() * 100,
-    y: Math.random() * 100,
-    delay: Math.random() * 5,
-  }))
+// Optimized cosmic particles
+const CosmicParticles = memo(() => {
+  const particles = useMemo(
+    () =>
+      Array.from({ length: 20 }, (_, i) => ({
+        id: i,
+        x: Math.random() * 100,
+        y: Math.random() * 100,
+        delay: Math.random() * 3,
+      })),
+    []
+  )
 
   return (
     <div className="absolute inset-0">
@@ -60,13 +70,14 @@ const CosmicParticles = () => {
           style={{
             left: `${particle.x}%`,
             top: `${particle.y}%`,
+            willChange: 'transform, opacity',
           }}
           animate={{
-            opacity: [0, 1, 0],
-            y: [0, -100, -200],
+            opacity: [0, 0.8, 0],
+            y: [0, -150, -300],
           }}
           transition={{
-            duration: Math.random() * 3 + 2,
+            duration: Math.random() * 4 + 3,
             repeat: Infinity,
             delay: particle.delay,
           }}
@@ -74,7 +85,8 @@ const CosmicParticles = () => {
       ))}
     </div>
   )
-}
+})
+CosmicParticles.displayName = 'CosmicParticles'
 
 const skillCategories = [
   {
@@ -174,7 +186,8 @@ function SkillCategory({ category, isVisible }: { category: typeof skillCategori
   )
 }
 
-export default function SkillsSection() {
+
+function SkillsContent() {
   const [ref, inView] = useInView({
     triggerOnce: true,
     threshold: 0.1,
@@ -214,14 +227,15 @@ export default function SkillsSection() {
       <motion.div
         className="absolute top-1/3 right-0 w-96 h-96 bg-cyan-500 rounded-full mix-blend-screen filter blur-3xl opacity-10"
         animate={{
-          x: [0, 100, 0],
-          y: [0, 50, 0],
+          x: [0, 80, 0],
+          y: [0, 40, 0],
         }}
         transition={{
-          duration: 12,
+          duration: 16,
           repeat: Infinity,
           repeatType: 'reverse',
         }}
+        style={{ willChange: 'transform' }}
       />
       
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
@@ -229,13 +243,13 @@ export default function SkillsSection() {
           ref={ref}
           initial={{ opacity: 0, y: 20 }}
           animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-          transition={{ duration: 0.8 }}
+          transition={{ duration: 0.6 }}
           className="text-center mb-12"
         >
           <h2 className="text-3xl sm:text-4xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-teal-400">
             Technical Expertise
           </h2>
-          <p className="text-gray-400 max-w-2xl mx-auto">
+          <p className="text-gray-400 max-w-2xl mx-auto text-sm">
             A showcase of the technologies and tools I work with to build modern, scalable solutions.
           </p>
         </motion.div>
@@ -246,7 +260,7 @@ export default function SkillsSection() {
               key={category.name}
               initial={{ opacity: 0, y: 20 }}
               animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-              transition={{ duration: 0.8 }}
+              transition={{ duration: 0.6 }}
             >
               <SkillCategory category={category} isVisible={inView} />
             </motion.div>
@@ -256,3 +270,5 @@ export default function SkillsSection() {
     </section>
   )
 }
+
+export default memo(SkillsContent)

@@ -1,17 +1,20 @@
 'use client'
 
-import { useState } from 'react'
+import { memo, useMemo, useState } from 'react'
 import { motion } from 'framer-motion'
 import { useInView } from 'react-intersection-observer'
 
-// Orbiting planets effect for projects
-const OrbitingProjects = ({ projectCount }: { projectCount: number }) => {
-  const orbits = Array.from({ length: projectCount }, (_, i) => ({
-    id: i,
-    angle: (i / projectCount) * 360,
-    radius: 120 + i * 30,
-    delay: i * 0.2,
-  }))
+// Optimized orbiting planets effect
+const OrbitingProjects = memo(({ projectCount }: { projectCount: number }) => {
+  const orbits = useMemo(
+    () =>
+      Array.from({ length: projectCount }, (_, i) => ({
+        id: i,
+        angle: (i / projectCount) * 360,
+        radius: 120 + i * 30,
+      })),
+    [projectCount]
+  )
 
   return (
     <div className="absolute inset-0 flex items-center justify-center overflow-hidden">
@@ -22,18 +25,19 @@ const OrbitingProjects = ({ projectCount }: { projectCount: number }) => {
           style={{
             width: orbit.radius * 2,
             height: orbit.radius * 2,
+            willChange: 'transform',
           }}
           animate={{
             rotate: 360,
           }}
           transition={{
-            duration: 30 + orbit.id * 5,
+            duration: 60 + orbit.id * 10,
             repeat: Infinity,
             repeatType: 'loop',
             ease: 'linear',
           }}
         >
-          <motion.div
+          <div
             className="absolute w-2 h-2 bg-gradient-to-r from-blue-400 to-cyan-400 rounded-full"
             style={{
               top: 0,
@@ -41,29 +45,28 @@ const OrbitingProjects = ({ projectCount }: { projectCount: number }) => {
               transform: 'translateX(-50%)',
               boxShadow: '0 0 10px rgba(34, 197, 235, 0.8)',
             }}
-            animate={{
-              scale: [1, 1.5, 1],
-            }}
-            transition={{
-              duration: 2,
-              repeat: Infinity,
-            }}
           />
         </motion.div>
       ))}
     </div>
   )
-}
+})
+OrbitingProjects.displayName = 'OrbitingProjects'
 
-// Cosmic dust particles
-const CosmicDust = () => {
-  const particles = Array.from({ length: 100 }, (_, i) => ({
-    id: i,
-    x: Math.random() * 100,
-    y: Math.random() * 100,
-    size: Math.random() * 2 + 0.5,
-    duration: Math.random() * 4 + 3,
-  }))
+// Optimized cosmic dust particles
+const CosmicDust = memo(() => {
+  const particles = useMemo(
+    () =>
+      Array.from({ length: 25 }, (_, i) => ({
+        id: i,
+        x: Math.random() * 100,
+        y: Math.random() * 100,
+        size: Math.random() * 1.5 + 0.5,
+        duration: Math.random() * 5 + 5,
+        delay: Math.random() * 2,
+      })),
+    []
+  )
 
   return (
     <div className="absolute inset-0 overflow-hidden">
@@ -76,21 +79,23 @@ const CosmicDust = () => {
             height: particle.size,
             left: `${particle.x}%`,
             top: `${particle.y}%`,
+            willChange: 'transform, opacity',
           }}
           animate={{
-            y: [0, -200, -400],
-            opacity: [0.5, 1, 0],
+            y: [0, -250, -500],
+            opacity: [0.3, 0.8, 0],
           }}
           transition={{
             duration: particle.duration,
             repeat: Infinity,
-            delay: Math.random() * 2,
+            delay: particle.delay,
           }}
         />
       ))}
     </div>
   )
-}
+})
+CosmicDust.displayName = 'CosmicDust'
 
 const projects = [
   {
@@ -130,20 +135,20 @@ function ProjectCard({ project, index }: { project: typeof projects[0]; index: n
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5, delay: index * 0.1 }}
+      transition={{ duration: 0.4, delay: index * 0.08 }}
       className="bg-gray-800/50 backdrop-blur-sm rounded-lg overflow-hidden"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
-      whileHover={{ scale: 1.05 }}
+      whileHover={{ scale: 1.03 }}
     >
       <div className="p-6">
         <h3 className="text-xl font-bold mb-3 bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-teal-400">
           {project.title}
         </h3>
-        <p className="text-gray-300 mb-4">{project.description}</p>
+        <p className="text-gray-300 mb-4 text-sm">{project.description}</p>
         
         <div className="mb-4">
-          <h4 className="text-sm font-semibold text-gray-400 mb-2">Technologies Used:</h4>
+          <h4 className="text-sm font-semibold text-gray-400 mb-2">Technologies:</h4>
           <div className="flex flex-wrap gap-2">
             {project.technologies.map((tech) => (
               <span
@@ -158,27 +163,23 @@ function ProjectCard({ project, index }: { project: typeof projects[0]; index: n
 
         <div className="mb-4">
           <h4 className="text-sm font-semibold text-gray-400 mb-2">Role:</h4>
-          <p className="text-gray-300">{project.role}</p>
+          <p className="text-gray-300 text-sm">{project.role}</p>
         </div>
 
         <div>
           <h4 className="text-sm font-semibold text-gray-400 mb-2">Impact:</h4>
-          <p className="text-gray-300">{project.impact}</p>
+          <p className="text-gray-300 text-sm">{project.impact}</p>
         </div>
       </div>
 
-      <motion.div
-        className="h-1 w-full bg-gradient-to-r from-blue-500 to-teal-400"
-        initial={{ scaleX: 0 }}
-        animate={{ scaleX: isHovered ? 1 : 0 }}
-        transition={{ duration: 0.3, ease: 'easeInOut' }}
-        style={{ originX: 0 }}
-      />
+      {isHovered && (
+        <div className="h-1 w-full bg-gradient-to-r from-blue-500 to-teal-400" />
+      )}
     </motion.div>
   )
 }
 
-export default function ProjectsSection() {
+function ProjectsContent() {
   const [ref, inView] = useInView({
     triggerOnce: true,
     threshold: 0.1,
@@ -192,14 +193,15 @@ export default function ProjectsSection() {
       <motion.div
         className="absolute top-0 left-1/2 transform -translate-x-1/2 w-96 h-96 bg-purple-600 rounded-full mix-blend-screen filter blur-3xl opacity-10"
         animate={{
-          scale: [1, 1.2, 1],
-          opacity: [0.1, 0.15, 0.1],
+          scale: [1, 1.15, 1],
+          opacity: [0.1, 0.12, 0.1],
         }}
         transition={{
-          duration: 6,
+          duration: 10,
           repeat: Infinity,
           repeatType: 'reverse',
         }}
+        style={{ willChange: 'transform' }}
       />
 
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
@@ -207,13 +209,13 @@ export default function ProjectsSection() {
           ref={ref}
           initial={{ opacity: 0, y: 20 }}
           animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-          transition={{ duration: 0.8 }}
+          transition={{ duration: 0.6 }}
           className="text-center mb-12"
         >
           <h2 className="text-3xl sm:text-4xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-teal-400">
             Featured Projects
           </h2>
-          <p className="text-gray-400 max-w-2xl mx-auto">
+          <p className="text-gray-400 max-w-2xl mx-auto text-sm">
             A showcase of my most impactful projects, demonstrating technical excellence and business value delivery.
           </p>
         </motion.div>
@@ -227,14 +229,16 @@ export default function ProjectsSection() {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-          transition={{ duration: 0.8, delay: 0.4 }}
+          transition={{ duration: 0.6, delay: 0.3 }}
           className="mt-12 text-center"
         >
-          <p className="text-gray-400 max-w-2xl mx-auto">
-          Crafting sophisticated small to medium-scale web applications, dynamic features, captivating animations, and designing interactive layouts through advanced coding techniques.
+          <p className="text-gray-400 max-w-2xl mx-auto text-sm">
+            Crafting sophisticated small to medium-scale web applications, dynamic features, captivating animations, and designing interactive layouts through advanced coding techniques.
           </p>
         </motion.div>
       </div>
     </section>
   )
-} 
+}
+
+export default memo(ProjectsContent) 
