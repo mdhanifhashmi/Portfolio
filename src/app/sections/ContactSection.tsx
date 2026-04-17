@@ -45,7 +45,7 @@ const FloatingStars = () => {
 
 // Canvas-based Black Hole Particle System
 const CanvasBlackHole = () => {
-  const canvasRef = useRef(null)
+  const canvasRef = useRef<HTMLCanvasElement>(null)
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -60,7 +60,15 @@ const CanvasBlackHole = () => {
 
     // Particle class
     class Particle {
-      constructor(x, y, distance) {
+      angle: number
+      radius: number
+      opacity: number
+      distance: number
+      speed: number
+      x: number
+      y: number
+
+      constructor(x: number, y: number, distance: number) {
         this.angle = Math.random() * 2 * Math.PI
         this.radius = Math.random() * 1.5
         this.opacity = (Math.random() * 5 + 2) / 10
@@ -74,10 +82,10 @@ const CanvasBlackHole = () => {
         const x = this.x + this.distance * Math.cos(this.angle)
         const y = this.y + this.distance * Math.sin(this.angle)
         
-        ctx.fillStyle = `rgba(59, 130, 246, ${this.opacity})`
-        ctx.beginPath()
-        ctx.arc(x, y, this.radius, 0, Math.PI * 2)
-        ctx.fill()
+        ctx!.fillStyle = `rgba(59, 130, 246, ${this.opacity})`
+        ctx!.beginPath()
+        ctx!.arc(x, y, this.radius, 0, Math.PI * 2)
+        ctx!.fill()
       }
 
       update() {
@@ -88,7 +96,12 @@ const CanvasBlackHole = () => {
 
     // Emitter class
     class Emitter {
-      constructor(x, y) {
+      x: number
+      y: number
+      radius: number
+      particles: Particle[]
+
+      constructor(x: number, y: number) {
         this.x = x
         this.y = y
         this.radius = 40
@@ -100,17 +113,17 @@ const CanvasBlackHole = () => {
       }
 
       draw() {
-        ctx.fillStyle = 'rgba(0, 0, 0, 0.95)'
-        ctx.beginPath()
-        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2)
-        ctx.fill()
+        ctx!.fillStyle = 'rgba(0, 0, 0, 0.95)'
+        ctx!.beginPath()
+        ctx!.arc(this.x, this.y, this.radius, 0, Math.PI * 2)
+        ctx!.fill()
 
         // Glow around black hole
-        ctx.strokeStyle = 'rgba(59, 130, 246, 0.3)'
-        ctx.lineWidth = 3
-        ctx.beginPath()
-        ctx.arc(this.x, this.y, this.radius + 5, 0, Math.PI * 2)
-        ctx.stroke()
+        ctx!.strokeStyle = 'rgba(59, 130, 246, 0.3)'
+        ctx!.lineWidth = 3
+        ctx!.beginPath()
+        ctx!.arc(this.x, this.y, this.radius + 5, 0, Math.PI * 2)
+        ctx!.stroke()
       }
 
       update() {
@@ -124,7 +137,7 @@ const CanvasBlackHole = () => {
     const emitter = new Emitter(canvas.width / 2, canvas.height / 2)
 
     const animate = () => {
-      ctx.clearRect(0, 0, canvas.width, canvas.height)
+      ctx!.clearRect(0, 0, canvas.width, canvas.height)
       emitter.update()
       requestAnimationFrame(animate)
     }

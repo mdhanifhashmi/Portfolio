@@ -211,38 +211,6 @@ const Meteors = () => {
   )
 }
 
-// Animated Orbit Rings (Simplified)
-const OrbitRings = () => {
-  return (
-    <div className="absolute inset-0 flex items-center justify-center overflow-hidden">
-      {/* Outer ring */}
-      <motion.div
-        className="absolute border border-blue-400/20 rounded-full"
-        style={{ width: 600, height: 600 }}
-        animate={{ rotate: 360 }}
-        transition={{
-          duration: 50,
-          repeat: Infinity,
-          repeatType: 'loop',
-          ease: 'linear',
-        }}
-      />
-      {/* Inner ring */}
-      <motion.div
-        className="absolute border border-cyan-400/30 rounded-full"
-        style={{ width: 400, height: 400 }}
-        animate={{ rotate: -360 }}
-        transition={{
-          duration: 40,
-          repeat: Infinity,
-          repeatType: 'loop',
-          ease: 'linear',
-        }}
-      />
-    </div>
-  )
-}
-
 export default function HeroSection() {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
 
