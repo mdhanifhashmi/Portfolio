@@ -35,7 +35,7 @@ export const initializeCache = async () => {
 }
 
 // Cache section data
-export const cacheSection = (key: string, data: any) => {
+export const cacheSection = (key: string, data: unknown) => {
   if (typeof window === 'undefined') return
 
   try {
@@ -44,8 +44,8 @@ export const cacheSection = (key: string, data: any) => {
       timestamp: Date.now(),
     }
     localStorage.setItem(key, JSON.stringify(cacheData))
-  } catch (error) {
-    console.warn(`Failed to cache ${key}:`, error)
+  } catch (err) {
+    console.warn(`Failed to cache ${key}:`, err)
   }
 }
 
@@ -105,7 +105,7 @@ export const hasCachedData = () => {
       localStorage.getItem(CACHE_KEYS.ABOUT_SECTION) !== null ||
       localStorage.getItem(CACHE_KEYS.PROJECTS_SECTION) !== null
     )
-  } catch (error) {
+  } catch {
     return false
   }
 }

@@ -3,12 +3,12 @@ import { getCachedSection, cacheSection } from '@/lib/cache'
 
 export interface UseCacheOptions {
   key: string
-  fetcher?: () => Promise<any>
+  fetcher?: () => Promise<unknown>
   enabled?: boolean
 }
 
 export function useCache({ key, fetcher, enabled = true }: UseCacheOptions) {
-  const [data, setData] = useState<any>(null)
+  const [data, setData] = useState<unknown>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<Error | null>(null)
 
@@ -50,7 +50,7 @@ export function useCache({ key, fetcher, enabled = true }: UseCacheOptions) {
 
 // Hook to update cache
 export function useUpdateCache(key: string) {
-  return (data: any) => {
+  return (data: unknown) => {
     cacheSection(key, data)
   }
 }

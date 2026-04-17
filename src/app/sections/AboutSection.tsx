@@ -44,6 +44,7 @@ const GalaxyStars = memo(() => {
     </div>
   )
 })
+GalaxyStars.displayName = 'GalaxyStars'
 
 // Orbiting particles around About Section - OPTIMIZED: 6 → 4 particles, removed scale animation
 const OrbitingParticles = memo(() => {
@@ -93,6 +94,7 @@ const OrbitingParticles = memo(() => {
     </div>
   )
 })
+OrbitingParticles.displayName = 'OrbitingParticles'
 
 // Cosmic Dust Effect - Rising particles - OPTIMIZED: 120 → 35 particles, removed scale animation
 const CosmicDustAbout = memo(() => {
@@ -139,6 +141,7 @@ const CosmicDustAbout = memo(() => {
     </div>
   )
 })
+CosmicDustAbout.displayName = 'CosmicDustAbout'
 
 // Center cyan sphere for visual depth
 const CenterSphere = memo(() => (
@@ -159,6 +162,7 @@ const CenterSphere = memo(() => (
     }}
   />
 ))
+CenterSphere.displayName = 'CenterSphere'
 
 export default function AboutSection() {
   const [ref, inView] = useInView({

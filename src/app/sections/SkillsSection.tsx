@@ -144,6 +144,7 @@ function SkillCard({ skill, index, isVisible }: { skill: { name: string; icon: s
                  transform hover:bg-gray-700/50 transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/20"
     >
       <div className="w-16 h-16 mb-4 relative group">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src={skill.icon}
           alt={skill.name}
