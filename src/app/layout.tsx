@@ -1,6 +1,7 @@
 import './globals.css'
 import { Inter, Roboto_Mono } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/react'
+import ClientWrapper from './components/ClientWrapper'
 
 const inter = Inter({
   subsets: ['latin'],
@@ -29,7 +30,9 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${inter.variable} ${robotoMono.variable} font-sans antialiased`}>
         <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black text-white">
-          {children}
+          <ClientWrapper>
+            {children}
+          </ClientWrapper>
         </div>
         <Analytics />
       </body>
